@@ -3,14 +3,15 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Store
+ * StoreRequest
  *
- * @ORM\Table(name="store")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\StoreRepository")
+ * @ORM\Table(name="store_request")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\StoreRequestRepository")
  */
-class Store
+class StoreRequest
 {
     /**
      * @var int
@@ -24,21 +25,27 @@ class Store
     /**
      * @var string
      *
-     * @ORM\Column(name="headers", type="string", length=255)
+     * @ORM\Column(name="headers", type="text")
+     * @Assert\NotBlank()
+     * @Assert\Type("string")
      */
     private $headers;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="body", type="string", length=255)
+     * @ORM\Column(name="body", type="text")
+     * @Assert\Length(min=0)
+     * @Assert\Type("string")
      */
-    private $body;
+    private $body = null;
 
     /**
      * @var string
      *
      * @ORM\Column(name="route", type="string", length=255)
+     * @Assert\NotBlank()
+     * @Assert\Type("string")
      */
     private $route;
 
@@ -46,6 +53,8 @@ class Store
      * @var string
      *
      * @ORM\Column(name="method", type="string", length=255)
+     * @Assert\NotBlank()
+     * @Assert\Length(min=3)
      */
     private $method;
 
@@ -53,6 +62,7 @@ class Store
      * @var string
      *
      * @ORM\Column(name="ip", type="string", length=255)
+     * @Assert\Ip
      */
     private $ip;
 
@@ -60,6 +70,7 @@ class Store
      * @var \DateTime
      *
      * @ORM\Column(name="created", type="datetime")
+     * @Assert\DateTime()
      */
     private $created;
 
@@ -79,7 +90,7 @@ class Store
      *
      * @param string $headers
      *
-     * @return Store
+     * @return StoreRequest
      */
     public function setHeaders($headers)
     {
@@ -103,7 +114,7 @@ class Store
      *
      * @param string $body
      *
-     * @return Store
+     * @return StoreRequest
      */
     public function setBody($body)
     {
@@ -127,7 +138,7 @@ class Store
      *
      * @param string $route
      *
-     * @return Store
+     * @return StoreRequest
      */
     public function setRoute($route)
     {
@@ -151,7 +162,7 @@ class Store
      *
      * @param string $method
      *
-     * @return Store
+     * @return StoreRequest
      */
     public function setMethod($method)
     {
@@ -175,7 +186,7 @@ class Store
      *
      * @param string $ip
      *
-     * @return Store
+     * @return StoreRequest
      */
     public function setIp($ip)
     {
@@ -199,7 +210,7 @@ class Store
      *
      * @param \DateTime $created
      *
-     * @return Store
+     * @return StoreRequest
      */
     public function setCreated($created)
     {
