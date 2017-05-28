@@ -3,13 +3,12 @@
 namespace AppBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\View\View;
-use AppBundle\Entity\Store;
+use AppBundle\Entity\StoreRequest;
 
 /**
  * @Route("/storeRequest")
@@ -21,9 +20,8 @@ class StoreRequestController extends FOSRestController
      */
     public function getAction($slug)
     {
+        $storeRequest = new StoreRequest;
         $request = Request::createFromGlobals();
-
-        $storeRequest = new Store;
 
         $storeRequest->setRoute($slug)
             ->setIp($request->getClientIp())
@@ -32,14 +30,23 @@ class StoreRequestController extends FOSRestController
             ->setHeaders($this->getHeadersAsString($request))
             ->setCreated($this->getUtcTime());
 
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($storeRequest);
-        $em->flush();
+        $errors = $this->get('validator')->validate($storeRequest);
 
-        $result = [
-            'Success' => true,
-            'id' => $storeRequest->getId(),
-        ];
+        if (count($errors) > 0) {
+            $result = [
+                'success' => false,
+                'errors' => $errors,
+            ];
+        } else {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($storeRequest);
+            $em->flush();
+
+            $result = [
+                'success' => true,
+                'id' => $storeRequest->getId(),
+            ];
+        }
 
         return new View($result, Response::HTTP_OK);
     }
