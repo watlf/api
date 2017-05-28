@@ -1,22 +1,22 @@
 # Main goal:
-Create API, that provides ability to save request info to it and get list of recieved requests.
+Create API, that provides ability to save request info to it and get list of resaved requests.
 
 ## How to install  
   
 ### First step  
-Need create folder for project.
-Then use console command.  
-```python
-cd folder  
-git init  
+
+Use console command.  
+```python 
 git clone https://github.com/watlf/api  
+cd folder api
+composer update
 ```
 
 ### Second step  
-Check your db configuration in api/app/config/parameters.yml
-Then use console command.  
+Use console command.  
 ```python
-php bin/console doctrine:schema:update --dump-sql  
+php bin/console doctrine:database:create
+php bin/console doctrine:schema:create 
 php bin/console server:run  
 ```
 
